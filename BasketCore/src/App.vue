@@ -1,101 +1,94 @@
 <template>
-  <div class="home-container" :class="{ 'dark-mode': isDarkMode }">
+  <div :class="{ 'dark-mode': isDarkMode }">
     <header>
-      <h1>BasketCore</h1>
-      <div style="display: flex;">
-        <div class="dropdown">
-          <span>MENU</span>
-          <div class="drop-content">
-            <router-link to="/about">About</router-link>
-            <router-link to="/contact">Contact</router-link>
-            <router-link to="/players">Players</router-link>
-            <router-link to="/teams">Teams</router-link>
-          </div>
-        </div>
-        <div class="toggle-container">
-          <label class="switch">
-            <input type="checkbox" id="slider-input" v-model="isDarkMode">
-            <span class="slider round"></span>
-          </label>
-        </div>
+      <div class="header-top">
+        <h1>BasketCore</h1>
+        <label class="switch">
+          <input type="checkbox" v-model="isDarkMode" />
+          <span class="slider round"></span>
+        </label>
       </div>
+      <nav class="nav-links">
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/login">Login</RouterLink>
+        <RouterLink to="/register">Register</RouterLink>
+      </nav>
     </header>
 
-    <main>
-      <h2>Basketball?</h2>
-      <p>Yes, here you will be able to view your favorite player's statistics and game schedule. Additionally, you can track their performance throughout the season.</p>
-      <img src="@/assets/basket.jpeg" alt="BasketCore logo" />
-    </main>
-
-    <aside :class="{ 'aside-dark-mode': isDarkMode }">
-      <h3>Related Articles</h3>
-      <ul>
-        <li><router-link to="/articles/2024-players">Best basketball players from 2024 season</router-link></li>
-        <li><router-link to="/articles/nba-review">NBA seasonal review</router-link></li>
-        <li><router-link to="/articles/latvian-stars">Latvian basketball stars</router-link></li>
-      </ul>
-    </aside>
+    <RouterView />
 
     <footer>
-      <p class="footer-text">&copy; 2024, Roberts Mačs</p>
-      <p class="footer-link">
-        <a href="https://www.instagram.com/r.machs/" target="_blank">Instagram</a>
-      </p>
+      <p>&copy; 2024, Roberts Mačs</p>
     </footer>
   </div>
 </template>
 
-<script>
-export default {
-  name: "BasketcoreHomePage",
-  data() {
-    return {
-      isDarkMode: false
-    };
-  }
-};
+<script setup>
+import { ref } from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
+
+const isDarkMode = ref(false)
 </script>
 
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-* {
-  box-sizing: border-box;
+<style>
+/* Layout */
+body, html {
   margin: 0;
   padding: 0;
+  font-family: Arial, sans-serif;
 }
 
-body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f0f2f5;
-  color: #333;
-  line-height: 1.6;
+/* Header & Footer */
+header,
+footer {
+  background-color: #222;
+  color: white;
+  padding: 15px;
 }
 
+header .header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  padding: 6px 12px;
+  background-color: #444;
+  border-radius: 4px;
+}
+
+/* Dark Mode */
 .dark-mode {
   background-color: #121212;
-  color: white;
+  color: #e0e0e0;
 }
 
-header {
-  background-color: #222;
-  color: #fff;
-  padding: 20px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+.dark-mode header,
+.dark-mode footer {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
 }
 
-header h1 {
-  font-size: 2.5em;
-  text-align: center;
+.dark-mode .nav-links a {
+  background-color: #333;
+  color: #e0e0e0;
 }
 
+/* Toggle switch */
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 40px;
+  height: 22px;
 }
 
 .switch input {
@@ -107,61 +100,32 @@ header h1 {
 .slider {
   position: absolute;
   cursor: pointer;
+  background-color: #ccc;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
+  transition: 0.4s;
+  border-radius: 22px;
 }
 
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
   border-radius: 50%;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
-.drop-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-}
-
-.dropdown:hover .drop-content {
-  display: block;
-}
-
-.container {
-  display: flex;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 20px auto;
-}
-
-main img {
-  max-width: 50%;
-  height: auto;
-  border-radius: 12px;
-}
-
-footer {
-  background-color: #222;
-  color: #fff;
-  text-align: center;
-  padding: 20px;
-}
-
-.footer-link a {
-  color: #ffc107;
-  text-decoration: none;
+input:checked + .slider::before {
+  transform: translateX(18px);
 }
 </style>
